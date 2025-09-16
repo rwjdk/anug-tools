@@ -4,6 +4,6 @@ namespace SharedModels.Models.EventParticipants;
 #nullable disable
 public class ParticipantNode
 {
-    [JsonPropertyName("user")]
+    [JsonPropertyName("member")]
     public Participant User { get; set; }
 }

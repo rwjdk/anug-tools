@@ -8,76 +8,32 @@ namespace AzureFunctionBackend;
 
 public class MeetupEventService
 {
-    private readonly GraphQLHttpClient _client = new("https://api.meetup.com/gql", new SystemTextJsonSerializer());
+    private readonly GraphQLHttpClient _client = new("https://api.meetup.com/gql-ext", new SystemTextJsonSerializer());
 
-    public async Task<IReadOnlyList<Event>> GetLast10Events()
+    public async Task<IReadOnlyList<Event>> GetEvents()
     {
         var request = new GraphQLRequest
         {
             Query = @"
             {
-              groupByUrlname(urlname: ""anugdk"") {
-                upcomingEvents(input: { first: 1000 }) {
-                    edges {
-                        node {
-                            id,
-                            title    
-                            status
-                            dateTime            
-                        }
-                    }
-                }   
-                pastEvents(input: { first: 1000}) {
-                    edges {
-                        node {
-                            id,
-                            title    
-                            status
-                            dateTime            
-                        }
-                    }
-                }    
-              }
+groupByUrlname(urlname: ""anugdk"") {
+			events(status: ACTIVE)
+      {
+          edges {
+          node {
+              id,
+              title    
+              status
+              dateTime            
+          }
+      	}
+      }			      
+		}
             }"
         };
 
         var response = await _client.SendQueryAsync<GroupEventsResponse>(request);
-        return response.Data.GetAllEvents().Take(10).ToList();
-    }
-
-    public async Task<IReadOnlyList<Event>> GetLast10Events(int eventId)
-    {
-        var request = new GraphQLRequest
-        {
-            Query = @"
-            {
-              groupByUrlname(urlname: ""anugdk"") {
-                upcomingEvents(input: { first: 1000 }) {
-                    edges {
-                        node {
-                            id,
-                            title    
-                            eventUrl
-                            dateTime            
-                        }
-                    }
-                }   
-                pastEvents(input: { first: 1000}) {
-                    edges {
-                        node {
-                            id,
-                            title    
-                            eventUrl
-                            dateTime            
-                        }
-                    }
-                }    
-              }
-            }"
-        };
-
-        var response = await _client.SendQueryAsync<GroupEventsResponse>(request);
-        return response.Data.GetAllEvents().Take(10).ToList();
+        return response.Data.GetAllEvents();
     }
 
     public async Task<IReadOnlyList<Participant>> GetParticipantsForEvent(string eventId)
@@ -86,19 +42,19 @@ public class MeetupEventService
         {
             Query = @$"
             {{
-              event(id: ""{eventId}"") {{
-                tickets(input: {{first: 1000}}) {{
-                  edges {{
-                    node {{
-                      user {{
-                        name
-                        isLeader
-                        memberUrl
-                      }}
-                    }}
-                  }}
-                }}
-              }}
+              		event(id: ""{eventId}""){{
+      rsvps {{
+        edges{{
+          node {{
+            member {{
+              name,
+              isLeader,
+              memberUrl
+            }}     
+          }}
+        }}
+      }}
+    }}
             }}",
         };
 

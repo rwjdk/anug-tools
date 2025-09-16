@@ -14,7 +14,7 @@ public class FunctionGetEvents(ILoggerFactory loggerFactory)
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
     {
         var response = req.CreateResponse(HttpStatusCode.OK);
-        var json = JsonSerializer.Serialize(await new MeetupEventService().GetLast10Events());
+        var json = JsonSerializer.Serialize(await new MeetupEventService().GetEvents());
         await response.WriteStringAsync(json);
 
         return response;

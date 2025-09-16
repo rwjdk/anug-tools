@@ -4,6 +4,6 @@ namespace SharedModels.Models.EventParticipants;
 #nullable disable
 public class ParticipantsRoot
 {
-    [JsonPropertyName("tickets")]
+    [JsonPropertyName("rsvps")]
     public ParticipantList Tickets { get; set; }
 }

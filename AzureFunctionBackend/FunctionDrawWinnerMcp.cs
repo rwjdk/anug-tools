@@ -18,7 +18,7 @@ public class FunctionDrawWinnerMcp(MeetupEventService meetupEventService, Partic
         [McpToolTrigger(Constants.ToolName, Constants.ToolDescription)]
         ToolInvocationContext context)
     {
-        IReadOnlyList<Event> events = await meetupEventService.GetLast10Events();
+        IReadOnlyList<Event> events = await meetupEventService.GetEvents();
         Event? @event = events.OrderByDescending(x => x.Date).FirstOrDefault(x => x.Date <= DateTime.Today.AddDays(1));
         if (@event == null)
         {
