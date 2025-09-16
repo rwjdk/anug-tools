@@ -43,7 +43,7 @@ groupByUrlname(urlname: ""anugdk"") {
             Query = @$"
             {{
               		event(id: ""{eventId}""){{
-      rsvps {{
+      rsvps(first: 1000) {{
         edges{{
           node {{
             member {{
