@@ -8,8 +8,6 @@ var builder = FunctionsApplication.CreateBuilder(args);
 builder.Services.AddScoped<ParticipationWinnerSelector>();
 builder.Services.AddScoped<MeetupEventService>();
 
-builder.EnableMcpToolMetadata();
-
 builder.ConfigureMcpTool(Constants.ToolName);
 
 builder.Build().Run();
