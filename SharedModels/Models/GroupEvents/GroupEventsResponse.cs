@@ -9,7 +9,7 @@ public class GroupEventsResponse
 
     public IReadOnlyList<Event> GetAllEvents()
     {
-        var result = Root.Events.Edges.Select(x => x.Node).ToList();
+        List<Event> result = Root.Events.Edges.Select(x => x.Node).ToList();
         return result.OrderByDescending(x => x.Date).ToList();
     }
 }

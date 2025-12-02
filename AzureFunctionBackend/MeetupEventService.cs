@@ -12,7 +12,7 @@ public class MeetupEventService
 
     public async Task<IReadOnlyList<Event>> GetEvents()
     {
-        var request = new GraphQLRequest
+        GraphQLRequest request = new GraphQLRequest
         {
             Query = @"
             {
@@ -32,13 +32,13 @@ groupByUrlname(urlname: ""anugdk"") {
             }"
         };
 
-        var response = await _client.SendQueryAsync<GroupEventsResponse>(request);
+        GraphQLResponse<GroupEventsResponse> response = await _client.SendQueryAsync<GroupEventsResponse>(request);
         return response.Data.GetAllEvents();
     }
 
     public async Task<IReadOnlyList<Participant>> GetParticipantsForEvent(string eventId)
     {
-        var request = new GraphQLRequest
+        GraphQLRequest request = new GraphQLRequest
         {
             Query = @$"
             {{
@@ -58,7 +58,7 @@ groupByUrlname(urlname: ""anugdk"") {
             }}",
         };
 
-        var response = await _client.SendQueryAsync<EventsParticipantsResponse>(request);
+        GraphQLResponse<EventsParticipantsResponse> response = await _client.SendQueryAsync<EventsParticipantsResponse>(request);
         return response.Data.Root.Tickets.Edges.Select(x => x.Node.User).ToList();
     }
 }

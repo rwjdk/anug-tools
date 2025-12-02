@@ -18,8 +18,8 @@ public class FunctionGetParticipants(ILoggerFactory loggerFactory)
             return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        var response = req.CreateResponse(HttpStatusCode.OK);
-        var json = JsonSerializer.Serialize(await new MeetupEventService().GetParticipantsForEvent(eventId));
+        HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+        string json = JsonSerializer.Serialize(await new MeetupEventService().GetParticipantsForEvent(eventId));
         await response.WriteStringAsync(json);
 
         return response;
