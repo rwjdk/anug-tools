@@ -1,0 +1,14 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DEBUG_REMOTE_BACKEND" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="AppHost/AppHost.csproj">
+    <BuildType Solution="DEBUG_REMOTE_BACKEND|*" Project="Debug" />
+  </Project>
+  <Project Path="AzureFunctionBackend/AzureFunctionBackend.csproj" />
+  <Project Path="BlazorApp/BlazorApp.csproj" />
+  <Project Path="SharedModels/SharedModels.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>
