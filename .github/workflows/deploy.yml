@@ -41,6 +41,7 @@ jobs:
       contents: read
       id-token: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: deployment
@@ -67,3 +68,12 @@ jobs:
             $response = Invoke-WebRequest -Uri $url -MaximumRetryCount 5 -RetryIntervalSec 10
             if ($response.StatusCode -ne 200) { throw "Smoke test failed: $url" }
           }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser smoke test tools
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install chromium
+      - name: Verify live Blazor startup in Chromium
+        run: node scripts/smoke-site.mjs

@@ -31,7 +31,7 @@ The workflow can also be run manually on `main` from GitHub Actions.
 
 Azure authentication uses OIDC, with no publish-profile password. The
 `anug-tools-github-deploy` managed identity trusts only
-`repo:rwjdk/anug-tools:ref:refs/heads/main` and has Website Contributor access
+`repo:rwjdk@7032102/anug-tools@641368448:ref:refs/heads/main` and has Website Contributor access
 only on those two apps. GitHub repository variables `AZURE_CLIENT_ID`,
 `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` supply the identity IDs.
 
