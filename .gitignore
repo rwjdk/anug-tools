@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local Azurite storage
+.azurite/
+
+# Local publish output
+artifacts/
