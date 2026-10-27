@@ -8,10 +8,7 @@ public class BackendCaller(HttpClient httpClient)
 {
     public async Task<IReadOnlyList<Event>?> GetEvents()
     {
-        string endpoint = "https://anugtoolsbackend.azurewebsites.net/api/FunctionGetEvents?"; //Open for CORS https://localhost:7112
-#if DEBUG
-        endpoint = "http://localhost:7083/api/FunctionGetEvents";
-#endif
+        string endpoint = "api/FunctionGetEvents";
         string json = await httpClient.GetStringAsync(endpoint);
         List<Event>? events = JsonSerializer.Deserialize<List<Event>>(json);
         return events;
@@ -19,10 +16,7 @@ public class BackendCaller(HttpClient httpClient)
 
     public async Task<List<Participant>?> GetParticipants(Event @event)
     {
-        string endpoint = $"https://anugtoolsbackend.azurewebsites.net/api/FunctionGetParticipants?eventId={@event.Id}"; //Open for CORS https://localhost:7112
-#if DEBUG
-        endpoint = $"http://localhost:7083/api/FunctionGetParticipants?eventId={@event.Id}";
-#endif
+        string endpoint = $"api/FunctionGetParticipants?eventId={Uri.EscapeDataString(@event.Id)}";
         string json = await httpClient.GetStringAsync(endpoint);
         return JsonSerializer.Deserialize<List<Participant>>(json);
     }

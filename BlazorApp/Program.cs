@@ -11,7 +11,11 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
 
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(_ => new HttpClient
+{
+    BaseAddress = new Uri(builder.Configuration["BackendUrl"]
+        ?? throw new InvalidOperationException("BackendUrl is not configured."))
+});
 builder.Services.AddScoped<ParticipationWinnerSelector>();
 builder.Services.AddScoped<BackendCaller>();
 builder.Services.AddScoped<IndexViewModel>();
