@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-      - run: dotnet build AnugTools.slnx --configuration Release
+      - run: dotnet build AnugTools.slnx --configuration Release -warnaserror
       - run: dotnet test Tests/Tests.csproj --configuration Release --no-build
       - run: dotnet publish AzureFunctionBackend/AzureFunctionBackend.csproj --configuration Release --no-restore --output artifacts/backend
       - run: dotnet publish BlazorApp/BlazorApp.csproj --configuration Release --no-restore --output artifacts/frontend

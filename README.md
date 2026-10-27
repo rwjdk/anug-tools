@@ -2,6 +2,9 @@
 
 ## Run locally
 
+All projects enable nullable reference checking and treat warnings as errors
+through `Directory.Build.props`. CI also enforces MSBuild warnings as errors.
+
 Install the .NET 10 SDK and Node.js, then install the local tools:
 
 ```powershell
