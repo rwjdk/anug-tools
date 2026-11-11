@@ -5,7 +5,7 @@
 All projects enable nullable reference checking and treat warnings as errors
 through `Directory.Build.props`. CI also enforces MSBuild warnings as errors.
 
-Install the .NET 10 SDK and Node.js, then install the local tools:
+Install the .NET 11 SDK and Node.js, then install the local tools:
 
 ```powershell
 npm install -g azure-functions-core-tools@4 azurite
@@ -38,7 +38,9 @@ Azure authentication uses OIDC, with no publish-profile password. The
 only on those two apps. GitHub repository variables `AZURE_CLIENT_ID`,
 `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` supply the identity IDs.
 
-The backend runs on Azure Functions v4 with `.NET 10 Isolated`. The frontend
+The backend now targets Azure Functions v4 with `.NET 11 Isolated`. Before deploying
+this upgrade, update the existing backend app's hosting runtime to .NET 11 isolated.
+This source upgrade does not change the live Azure configuration. The frontend
 is static Blazor WebAssembly served by IIS; it doesn't execute a server-side
 .NET application. Aspire and Azurite are for local development only.
 

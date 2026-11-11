@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
       - run: dotnet build AnugTools.slnx --configuration Release -warnaserror
       - run: dotnet test Tests/Tests.csproj --configuration Release --no-build
       - run: dotnet publish AzureFunctionBackend/AzureFunctionBackend.csproj --configuration Release --no-restore --output artifacts/backend
