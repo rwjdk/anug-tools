@@ -2,8 +2,9 @@
 
 namespace SharedModels.Services;
 
-public class ParticipationWinnerSelector
+public class ParticipationWinnerSelector(Random? random = null)
 {
+    private readonly Random _random = random ?? Random.Shared;
     public void MarkParticipantsAsWinners(IReadOnlyList<Participant> participants, bool includeHosts, int numberOfWinnersToDraw)
     {
         SetWinnerState(participants, false);
@@ -22,7 +23,7 @@ public class ParticipationWinnerSelector
         List<Participant> winners = new List<Participant>();
         while (winners.Count < numberOfWinnersToDraw)
         {
-            Participant newWinner = possibleWinners[Random.Shared.Next(possibleWinners.Count)];
+            Participant newWinner = possibleWinners[_random.Next(possibleWinners.Count)];
             if (!winners.Contains(newWinner))
             {
                 winners.Add(newWinner);
