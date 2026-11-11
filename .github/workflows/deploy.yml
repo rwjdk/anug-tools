@@ -24,7 +24,16 @@ jobs:
           dotnet-version: 11.0.x
       - run: dotnet build AnugTools.slnx --configuration Release -warnaserror
       - run: dotnet test Tests/Tests.csproj --configuration Release --no-build
-      - run: dotnet publish AzureFunctionBackend/AzureFunctionBackend.csproj --configuration Release --no-restore --output artifacts/backend
+      - run: dotnet publish AzureFunctionBackend/AzureFunctionBackend.csproj --configuration Release --runtime win-x64 --self-contained true --output artifacts/backend
+      - name: Validate bundled .NET 11 worker
+        shell: pwsh
+        run: |
+          $runtime = Get-Content artifacts/backend/AzureFunctionBackend.runtimeconfig.json -Raw | ConvertFrom-Json
+          if ($runtime.runtimeOptions.tfm -ne 'net11.0') { throw 'Expected .NET 11 output.' }
+          if (!($runtime.runtimeOptions.includedFrameworks | Where-Object { $_.name -eq 'Microsoft.NETCore.App' -and $_.version -match '^11\.\d+\.\d+$' })) { throw 'Expected a bundled .NET 11 GA runtime.' }
+          foreach ($file in @('AzureFunctionBackend.exe', 'coreclr.dll')) {
+            if (!(Test-Path "artifacts/backend/$file")) { throw "Missing self-contained worker file: $file" }
+          }
       - run: dotnet publish BlazorApp/BlazorApp.csproj --configuration Release --no-restore --output artifacts/frontend
       - uses: actions/upload-artifact@v4
         with:
@@ -51,6 +60,13 @@ jobs:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Configure host for the self-contained .NET 11 worker
+        shell: pwsh
+        run: |
+          az functionapp config set --resource-group Anug-Tools --name AnugToolsBackend --net-framework-version v10.0 --use-32bit-worker-process false --output none
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the Functions host.' }
+          az functionapp config appsettings set --resource-group Anug-Tools --name AnugToolsBackend --settings FUNCTIONS_WORKER_RUNTIME=dotnet-isolated FUNCTIONS_EXTENSION_VERSION=~4 WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED=0 --output none
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the isolated worker.' }
       - name: Deploy Functions backend
         uses: Azure/functions-action@v1
         with:

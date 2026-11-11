@@ -38,9 +38,10 @@ Azure authentication uses OIDC, with no publish-profile password. The
 only on those two apps. GitHub repository variables `AZURE_CLIENT_ID`,
 `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` supply the identity IDs.
 
-The backend now targets Azure Functions v4 with `.NET 11 Isolated`. Before deploying
-this upgrade, update the existing backend app's hosting runtime to .NET 11 isolated.
-This source upgrade does not change the live Azure configuration. The frontend
+The backend targets Azure Functions v4 with a self-contained `.NET 11 Isolated`
+win-x64 worker that bundles the GA runtime. The current Windows image only has
+.NET 11 RC3, so the deployment workflow keeps the platform host on v10.0,
+selects 64-bit workers, and disables optimized placeholders. The frontend
 is static Blazor WebAssembly served by IIS; it doesn't execute a server-side
 .NET application. Aspire and Azurite are for local development only.
 
